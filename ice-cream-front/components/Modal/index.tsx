@@ -1,0 +1,32 @@
+'use client';
+
+import React from "react";
+import { FaTimes } from "react-icons/fa";
+
+interface ModalProps {
+    isOpenModal: boolean;
+    setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+    children: React.ReactNode
+    type: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export function Modal({ isOpenModal, setIsOpenModal, type, children }: ModalProps) {
+
+    return (
+        <>
+        {isOpenModal &&
+            <div className="fixed z-50 top-0 left-0 right-0 w-full min-h-screen bg-white">
+                <div onClick={() => {
+                    setIsOpenModal(false);
+                    type('btns');
+                }} className="w-7 h-7 text-sm bg-black text-white grid place-items-center rounded-full absolute top-5 right-3 cursor-pointer transition-all duration-500 hover:bg-yellow-400">
+                    <FaTimes />
+                </div>
+                <div className="px-4 py-12">
+                    {children}
+                </div>
+            </div>
+        }
+        </>
+    )
+}

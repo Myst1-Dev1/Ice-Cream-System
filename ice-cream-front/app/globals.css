@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+body {
+  background-color: #fbfbfb;
+}
+
+*:focus {
+  outline: none;
+}
+
+.rdp-chevron {
+  fill: #000 !important;
+}
+
+.rdp-caption_label {
+  display: inline-block !important;
+}
+
+.rdp-caption_label::first-letter {
+  text-transform: uppercase !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+@layer components {
+  .button {
+    @apply text-xl font-semibold rounded-lg p-3 w-full bg-yellow-500 text-white cursor-pointer transition-all duration-500 hover:brightness-90
+  }
+}

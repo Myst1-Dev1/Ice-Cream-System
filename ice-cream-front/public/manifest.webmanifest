@@ -1,0 +1,21 @@
+{
+  "name": "Sorveteria Raio de Sol",
+  "short_name": "Sorveteria",
+  "description": "Sistema de gerenciamento de gastos e lucros da sorveteria",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBFBFB",
+  "theme_color": "#FBFBFB",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
