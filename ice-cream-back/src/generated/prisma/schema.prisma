@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider   = "prisma-client-js"
-  // output     = "../src/generated/prisma"
+  provider     = "prisma-client-js"
+  output       = "../src/generated/prisma"
   moduleFormat = "commonjs"
 }
 
@@ -20,11 +20,11 @@ enum SaleType {
 }
 
 model Sale {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   category  String
   flavor    String
   price     Float
   amount    Int
   type      SaleType
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 }

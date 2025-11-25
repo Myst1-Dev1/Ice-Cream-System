@@ -29,6 +29,7 @@
     "@prisma/client": "^7.0.0",
     "bcrypt": "^6.0.0",
     "class-validator": "^0.14.2",
+    "dotenv": "^17.2.3",
     "passport": "^0.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
