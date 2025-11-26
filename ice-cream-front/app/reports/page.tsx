@@ -1,11 +1,16 @@
+'use server';
+
 import { ReportsGraph } from "@/components/ReportsGraph";
 import { WeekCalendar } from "@/components/WeekCalendar";
+import { isDarkMode } from "@/services/darkMode";
 import { PiPintGlass } from "react-icons/pi";
 
-export default function Reports() {
+export default async function Reports() {
+    const dark = await isDarkMode();
+    
     return (
         <>
-            <div className="px-3 py-8">
+            <div className={`px-3 py-8 transition-all duration-500 ${dark ? 'bg-[#242424] text-white' : 'bg-[#fbfbfb]'}`}>
                 <WeekCalendar />
                 <div className="mb-20">
                     <h2 className="text-xl font-bold">Vendas e Lucros</h2>
@@ -36,9 +41,9 @@ export default function Reports() {
                         <table className="w-full table-fixed">
                             <thead>
                                 <tr className="text-left border-b border-gray-300">
-                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-700">Categoria</th>
-                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-700 pl-3">Sabor</th>
-                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-700 text-right">Preço</th>
+                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-500">Categoria</th>
+                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-500 pl-3">Sabor</th>
+                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">Preço</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -1,12 +1,17 @@
+'use server';
+
 import { FlavorsGraphs } from "@/components/FlavorsGraph";
+import { isDarkMode } from "@/services/darkMode";
 import { PiArrowDownRight, PiArrowUpRight, PiPiggyBank, PiPintGlass, PiPopsicle } from "react-icons/pi";
 
-export default function Home() {
+export default async function Home() {
+    const dark = await isDarkMode();
+    
     return (
         <>
-            <div className="px-3 py-8">
+            <div className={`px-3 py-8 transition-all duration-500 ${dark ? 'bg-[#202020] text-white' : 'bg-[#fbfbfb] text-black'}`}>
                 <div className="grid grid-cols-2 gap-4 place-items-center">
-                    <div className="bg-white p-2.5 rounded-md max-w-36 w-full">
+                    <div className={`${dark ? 'bg-[#242424]' : 'bg-white'} p-2.5 rounded-md max-w-36 w-full`}>
                         <div className="w-6 h-6 bg-green-400 rounded-md grid place-items-center text-white">
                             <PiArrowUpRight />
                         </div>
@@ -15,7 +20,7 @@ export default function Home() {
                             <h3 className="font-bold text-xl">+R$: 90,00</h3>
                         </div>
                     </div>
-                    <div className="bg-white p-2.5 rounded-md max-w-36 w-full">
+                    <div className={`${dark ? 'bg-[#242424]' : 'bg-white'} p-2.5 rounded-md max-w-36 w-full`}>
                         <div className="w-6 h-6 bg-red-400 rounded-md grid place-items-center text-white">
                             <PiArrowDownRight />
                         </div>
@@ -24,7 +29,7 @@ export default function Home() {
                             <h3 className="font-bold text-xl">+R$: 30,00</h3>
                         </div>
                     </div>
-                    <div className="bg-white p-2.5 rounded-md max-w-36 w-full">
+                    <div className={`${dark ? 'bg-[#242424]' : 'bg-white'} p-2.5 rounded-md max-w-36 w-full`}>
                         <div className="w-6 h-6 bg-blue-400 rounded-md grid place-items-center text-white">
                             <PiPiggyBank />
                         </div>
@@ -47,9 +52,9 @@ export default function Home() {
                         <table className="w-full table-fixed">
                             <thead>
                                 <tr className="text-left border-b border-gray-300">
-                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-700">Categoria</th>
-                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-700 pl-3">Sabor</th>
-                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-700 text-right">Preço</th>
+                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-500">Categoria</th>
+                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-500 pl-3">Sabor</th>
+                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">Preço</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,9 +73,9 @@ export default function Home() {
                         <table className="w-full table-fixed">
                             <thead>
                                 <tr className="text-left border-b border-gray-300">
-                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-700">Categoria</th>
-                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-700 pl-3">Sabor</th>
-                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-700 text-right">Preço</th>
+                                    <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-500">Categoria</th>
+                                    <th className="py-2 w-1/3 text-sm font-medium text-gray-500 pl-3">Sabor</th>
+                                    <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">Preço</th>
                                 </tr>
                             </thead>
                             <tbody>

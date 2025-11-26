@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PiArrowDownRightFill, PiFileText, PiHouse, PiPlus, PiShoppingCartFill, PiStorefrontFill } from "react-icons/pi";
+import { PiFileText, PiHouse, PiPlus, PiShoppingCartFill, PiStorefrontFill } from "react-icons/pi";
 import { Modal } from "../Modal";
 import { useState } from "react";
 
@@ -11,15 +11,19 @@ export function NavBar() {
     const [formType, setFormType] = useState('btns');
 
     const pathname = usePathname();
+
+    const isDark =
+    typeof document !== "undefined" &&
+    document.cookie.includes("dark=true");
     
     return (
         <>
-            <nav className={`bg-white w-full h-16 fixed shadow-lg z-50 bottom-0 left-0 right-0 ${pathname === '/' ? 'hidden' : 'flex'} justify-between`}>
+            <nav className={`${isDark ? 'bg-[#242424] text-white' : 'bg-white'} w-full h-16 fixed shadow-lg z-50 bottom-0 left-0 right-0 ${pathname === '/' ? 'hidden' : 'flex'} justify-between`}>
                 <Link href="/home" className="font-bold flex justify-center items-center flex-col gap-3 px-4 transition-all duration-500 hover:bg-yellow-500 hover:text-white">
                     <PiHouse />
                     Home
                 </Link>
-                <div onClick={() => setIsOpenModal(true)} className="w-10 h-10 -mt-6 shadow-lg rounded-full cursor-pointer bg-white grid place-items-center transition-all duration-500 font-bold text-xl hover:bg-amber-500 hover:text-white">
+                <div onClick={() => setIsOpenModal(true)} className={`w-10 h-10 -mt-6 shadow-lg rounded-full cursor-pointer ${isDark ? 'bg-[#252525]' : 'bg-white'} grid place-items-center transition-all duration-500 font-bold text-xl hover:bg-amber-500 hover:text-white`}>
                     <PiPlus />
                 </div>
                 <Link href="/reports" className="font-bold flex flex-col gap-3 px-4 justify-center items-center transition-all duration-500 hover:bg-yellow-500 hover:text-white">

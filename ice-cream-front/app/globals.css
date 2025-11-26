@@ -1,15 +1,11 @@
 @import "tailwindcss";
 
-body {
-  background-color: #fbfbfb;
-}
-
 *:focus {
   outline: none;
 }
 
 .rdp-chevron {
-  fill: #000 !important;
+  fill: oklch(76.9% 0.188 70.08) !important;
 }
 
 .rdp-caption_label {

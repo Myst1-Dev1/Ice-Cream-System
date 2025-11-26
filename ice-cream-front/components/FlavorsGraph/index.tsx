@@ -15,7 +15,7 @@ export function FlavorsGraphs() {
       toolbar: { show: false },
     },
 
-    colors: ["oklch(79.2% 0.209 151.711)", "#f59e0b"], // barra azul + linha amarela
+    colors: ["oklch(79.2% 0.209 151.711)", "#f59e0b"],
 
     stroke: {
       width: [0, 3],
