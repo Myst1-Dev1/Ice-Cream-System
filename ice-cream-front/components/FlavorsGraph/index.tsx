@@ -1,13 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import { SalesType } from '@/@types/SalesType';
 import dynamic from 'next/dynamic';
 
 const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-export function FlavorsGraphs() {
-  const flavors = ["Morango", "Chocolate", "Uva", "Coco"];
-  const values = [19, 47, 53, 13];
+interface FlavorsGraphsProps {
+  data: SalesType[];
+  dark: boolean;
+}
+
+export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
+
+  const axisTextColor = dark ? '#ffffff' : '#4b5563';
+
+  const flavorCounts: Record<string, number> = {};
+
+  data.forEach((sale) => {
+    if (sale.type === "venda" && sale.flavor) {
+
+      const flavors = sale.flavor
+        .split(" e ")
+        .map(f => f.trim())
+        .filter(f => f.length > 0);
+
+      const quantity = sale.amount && sale.amount > 0 ? sale.amount : 1;
+
+      flavors.forEach((f) => {
+        flavorCounts[f] = (flavorCounts[f] || 0) + quantity;
+      });
+    }
+  });
+
+  const topFlavors = Object.entries(flavorCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
+
+  const flavors = topFlavors.map(([name]) => name);
+  const values = topFlavors.map(([_, count]) => count);
 
   const options: any = {
     chart: {
@@ -15,38 +46,45 @@ export function FlavorsGraphs() {
       toolbar: { show: false },
     },
 
-    colors: ["oklch(79.2% 0.209 151.711)", "#f59e0b"],
-
-    stroke: {
-      width: [0, 3],
-      curve: "smooth",
-    },
+    colors: ["oklch(79.2% 0.209 151.711)"],
 
     xaxis: {
       categories: flavors,
+      labels: {
+        style: {
+          colors: axisTextColor,
+          fontSize: "14px"
+        }
+      }
     },
 
-    tooltip: {
-      shared: true,
-      intersect: false,
+    yaxis: {
+      labels: {
+        style: {
+          colors: axisTextColor
+        }
+      }
     },
 
     grid: {
-      borderColor: "#e5e7eb",
+      borderColor: dark ? "#374151" : "#e5e7eb",
       strokeDashArray: 4,
     },
 
     dataLabels: { enabled: false },
 
-    legend: {
-      position: "top",
-      horizontalAlign: "left",
+    tooltip: {
+      theme: dark ? "dark" : "light",
+      style: {
+        fontSize: "14px",
+        fontFamily: "inherit",
+      }
     },
   };
 
   const series = [
     {
-      name: "Vendas",
+      name: "Vendas por sabor",
       type: "bar",
       data: values,
     }
@@ -54,7 +92,12 @@ export function FlavorsGraphs() {
 
   return (
     <div className="w-full h-72 mt-4">
-      <ApexCharts options={options} series={series} type="line" height="100%" />
+      <ApexCharts
+        options={options}
+        series={series}
+        type="bar"
+        height="100%"
+      />
     </div>
   );
 }
