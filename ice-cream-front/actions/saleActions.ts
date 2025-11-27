@@ -8,21 +8,43 @@ import { cookies } from "next/headers";
 export async function createSale(_: FormResult, formData: FormData): Promise<FormResult> {
     const category = formData.get("category")?.toString();
     const flavor = formData.get("flavor")?.toString();
-
-    const priceRaw = formData.get("price");
-    const price = priceRaw ? Number(priceRaw) : undefined;
-
     const type = formData.get("type")?.toString();
 
+    const priceRaw = formData.get("price");
     const amountRaw = formData.get("amount");
+
+    const cupSize = formData.get("cupSize")?.toString();
+    const typeOfPot = formData.get("typeOfPot")?.toString();
+
+    if (!category || !flavor || !priceRaw || !type)
+        return { success: false, message: "Campos obrigatórios!" };
+
+    let price = Number(priceRaw);
     const amount = amountRaw ? Number(amountRaw) : undefined;
 
-    if(!category || !flavor || !priceRaw || !type) return { success: false, message:'Campos obrigatórios!' };
+    if (amount && !isNaN(amount)) {
+        price = price * amount;
+    }
+
+    let finalCategory = category;
+
+    if (category === "Copo" && cupSize) {
+        finalCategory = `Copo de ${cupSize}`;
+    }
+
+    if (category === "Pote" && typeOfPot) {
+        finalCategory = `Pote de ${typeOfPot}`;
+    }
 
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
 
-    const payload: any = { category, flavor, price, type };
+    const payload: any = {
+        category: finalCategory,
+        flavor,
+        price,
+        type
+    };
 
     if (amount !== undefined) {
         payload.amount = amount;
@@ -33,9 +55,9 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
         });
 
         const data = await res.json();

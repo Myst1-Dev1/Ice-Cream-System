@@ -16,6 +16,10 @@
   text-transform: uppercase !important;
 }
 
+.rdp-today:not(.rdp-outside) {
+  color: oklch(76.9% 0.188 70.08) !important;;
+}
+
 input[type="number"]::-webkit-inner-spin-button {
   display: none;
 }

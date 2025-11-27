@@ -1,12 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { ptBR } from "date-fns/locale";
 
-export function WeekCalendar() {
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(new Date());
+interface WeekCalendarProps {
+  selectedDay: Date | undefined;
+  onSelectDay:Dispatch<SetStateAction<Date | undefined>>
+}
+
+export function WeekCalendar({ selectedDay, onSelectDay }:WeekCalendarProps) {
 
   return (
     <div className="w-full px-2 pb-2">
@@ -14,7 +18,7 @@ export function WeekCalendar() {
         <DayPicker
           mode="single"
           selected={selectedDay}
-          onSelect={setSelectedDay}
+          onSelect={onSelectDay}
           locale={ptBR}
           weekStartsOn={6}
           showOutsideDays={false}
