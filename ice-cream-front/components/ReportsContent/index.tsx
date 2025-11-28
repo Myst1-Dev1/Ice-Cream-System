@@ -5,8 +5,10 @@ import { SalesType } from "@/@types/SalesType";
 import { PeriodFilter } from "../PeriodFilter";
 import { filterSales } from "@/services/useFilteredSales";
 import { ReportsGraph } from "../ReportsGraph";
-import { CategoryIcon } from "../CategoryIcon";
 import { WeekCalendar } from "../WeekCalendar";
+import { SalesBox } from "../SalesBox";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 interface Props {
   data: SalesType[];
@@ -33,6 +35,14 @@ export function ReportsContent({ data, dark }: Props) {
     0
   );
 
+  useGSAP(() => {
+        const tl = gsap.timeline({defaults: { duration:0.4, stagger:0.5, ease:'sine.inOut' }});
+
+        tl.fromTo('.calendar', { opacity:0, y:-20 }, { opacity:1, y:0 });
+        tl.fromTo('.period', { opacity:0, x:-20 }, { opacity:1, x:0 });
+        tl.fromTo('.rp-txt', { opacity:0, x:-20 }, { opacity:1, x:0 });
+    }, []);
+
   return (
     <>
       <WeekCalendar selectedDay={selectedDay} onSelectDay={setSelectedDay} />
@@ -41,8 +51,8 @@ export function ReportsContent({ data, dark }: Props) {
 
       <div className="flex gap-5">
         <div>
-          <span className="font-light text-sm">Total do período</span>
-          <h3 className="text-xl font-bold">
+          <span className="font-light text-sm rp-txt">Total do período</span>
+          <h3 className="text-xl font-bold rp-txt">
             {Intl.NumberFormat("pt-br", {
               style: "currency",
               currency: "brl",
@@ -50,8 +60,8 @@ export function ReportsContent({ data, dark }: Props) {
           </h3>
         </div>
         <div>
-          <span className="font-light text-sm">Quantidade {selectedType === 'venda' ? 'vendida' : 'comprada' }</span>
-          <h3 className="text-xl font-bold">{quantity} Itens</h3>
+          <span className="font-light text-sm rp-txt">Quantidade {selectedType === 'venda' ? 'vendida' : 'comprada' }</span>
+          <h3 className="text-xl font-bold rp-txt">{quantity} Itens</h3>
         </div>
       </div>
 
@@ -65,42 +75,7 @@ export function ReportsContent({ data, dark }: Props) {
       </div>
 
       {filtered.map((sales: SalesType) => (
-        <div key={sales.id} className="rounded-lg border border-gray-300 mt-5 flex">
-          <div className="grid place-items-center text-xl w-16 border-r border-gray-300">
-            <CategoryIcon category={sales.category} />
-          </div>
-          <table className="w-full table-fixed">
-            <thead>
-              <tr className="text-left border-b border-gray-300">
-                <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-500">Categoria</th>
-                <th className="py-2 w-1/3 text-sm font-medium text-gray-500 pl-3">Sabor</th>
-                <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">Preço</th>
-                {sales.amount && (
-                  <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">
-                    Quantidade
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="text-left">
-                <td className="py-2 pl-3 w-1/3 text-base font-light">{sales.category}</td>
-                <td className="py-2 w-1/3 text-base font-light pl-3">{sales.flavor}</td>
-                <td className="py-2 pr-3 w-1/3 text-base font-normal text-right">
-                  {Intl.NumberFormat("pt-br", {
-                    style: "currency",
-                    currency: "brl",
-                  }).format(sales.price)}
-                </td>
-                {sales.amount && (
-                  <td className="py-2 pr-3 w-1/3 text-base font-normal text-right">
-                    {sales.amount}
-                  </td>
-                )}
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <SalesBox sales={sales} key={sales.id} />
       ))}
     </>
   );

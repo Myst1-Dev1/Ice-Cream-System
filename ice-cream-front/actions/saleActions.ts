@@ -2,7 +2,7 @@
 'use server';
 
 import { FormResult } from "@/@types/FormResult";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function createSale(_: FormResult, formData: FormData): Promise<FormResult> {
@@ -13,13 +13,17 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     const priceRaw = formData.get("price");
     const amountRaw = formData.get("amount");
 
+    const priceFloat = priceRaw
+    ? parseFloat(String(priceRaw).replace(",", "."))
+    : null;
+
     const cupSize = formData.get("cupSize")?.toString();
     const typeOfPot = formData.get("typeOfPot")?.toString();
 
     if (!category || !flavor || !priceRaw || !type)
         return { success: false, message: "Campos obrigatórios!" };
 
-    let price = Number(priceRaw);
+    let price = Number(priceFloat);
     const amount = amountRaw ? Number(amountRaw) : undefined;
 
     if (amount && !isNaN(amount)) {
@@ -63,7 +67,8 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
         const data = await res.json();
         console.log(data);
 
-        revalidateTag("sales");
+        revalidatePath('/home');
+        revalidateTag("sales", "max");
 
         return { success: true, message: "Venda cadastrada!" };
     } catch (error) {

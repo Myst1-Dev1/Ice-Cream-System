@@ -13,7 +13,7 @@ interface WeekCalendarProps {
 export function WeekCalendar({ selectedDay, onSelectDay }:WeekCalendarProps) {
 
   return (
-    <div className="w-full px-2 pb-2">
+    <div className="w-full px-2 pb-2 calendar">
       <div>
         <DayPicker
           mode="single"

@@ -71,6 +71,14 @@ export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
       strokeDashArray: 4,
     },
 
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        borderRadiusApplication: 'end',
+        horizontal: true,
+      }
+    },
+
     dataLabels: { enabled: false },
 
     tooltip: {

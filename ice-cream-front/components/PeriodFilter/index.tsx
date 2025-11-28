@@ -18,7 +18,7 @@ export function PeriodFilter({ onChange }: Props) {
     <div className="flex gap-3 py-4">
       <span
         onClick={() => handleSelect("year")}
-        className={`w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
+        className={`period w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
           ${selected === "year" ? "bg-yellow-500 text-white font-bold" : "border-gray-300"}`}
       >
         Ano
@@ -26,7 +26,7 @@ export function PeriodFilter({ onChange }: Props) {
 
       <span
         onClick={() => handleSelect("month")}
-        className={`w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
+        className={`period w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
           ${selected === "month" ? "bg-yellow-500 text-white font-bold" : "border-gray-300"}`}
       >
         Mês
@@ -34,7 +34,7 @@ export function PeriodFilter({ onChange }: Props) {
 
       <span
         onClick={() => handleSelect("day")}
-        className={`w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
+        className={`period w-12 grid place-items-center p-1 border rounded-full text-sm cursor-pointer 
           ${selected === "day" ? "bg-yellow-500 text-white font-bold" : "border-gray-300"}`}
       >
         Dia

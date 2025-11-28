@@ -7,6 +7,7 @@ import { Modal } from "../../Modal";
 import { useActionState, useRef, useState } from "react";
 import { createSale } from "@/actions/saleActions";
 import { Loading } from "../../loading";
+import { handleMoneyChange } from "@/utils/moneyMask";
 
 interface NavBarContentProps {
     dark: boolean;
@@ -35,14 +36,14 @@ export function NavBarContent({ dark }:NavBarContentProps) {
     return (
         <>
             <nav className={`${dark ? 'bg-[#242424] text-white' : 'bg-white'} w-full h-16 fixed shadow-lg z-50 bottom-0 left-0 right-0 ${pathname === '/' ? 'hidden' : 'flex'} justify-between`}>
-                <Link href="/home" className="font-bold flex justify-center items-center flex-col gap-3 px-4 transition-all duration-500 hover:bg-yellow-500 hover:text-white">
+                <Link href="/home" className="flex-1 font-bold flex justify-center items-center flex-col gap-3 px-4 transition-all duration-500 hover:bg-yellow-500 hover:text-white">
                     <PiHouse />
                     Home
                 </Link>
-                <div onClick={() => setIsOpenModal(true)} className={`w-10 h-10 -mt-6 shadow-lg rounded-full cursor-pointer ${dark ? 'bg-[#252525]' : 'bg-white'} grid place-items-center transition-all duration-500 font-bold text-xl hover:bg-amber-500 hover:text-white`}>
+                <div onClick={() => setIsOpenModal(true)} className={`ml-auto w-10 h-10 -mt-6 shadow-lg rounded-full cursor-pointer ${dark ? 'bg-[#252525]' : 'bg-white'} grid place-items-center transition-all duration-500 font-bold text-xl hover:bg-amber-500 hover:text-white`}>
                     <PiPlus />
                 </div>
-                <Link href="/reports" className="font-bold flex flex-col gap-3 px-4 justify-center items-center transition-all duration-500 hover:bg-yellow-500 hover:text-white">
+                <Link href="/reports" className="flex-1 font-bold flex flex-col gap-3 px-4 justify-center items-center transition-all duration-500 hover:bg-yellow-500 hover:text-white">
                     <PiFileText />
                     Relatórios
                 </Link>
@@ -80,11 +81,14 @@ export function NavBarContent({ dark }:NavBarContentProps) {
                                 name="cupSize"
                                 className="w-full mt-3 p-3 border border-gray-300 rounded-md outline-none"
                                 >
-                                <option value="" className="text-gray-600">Selecione o tamanho</option>
-                                <option className="text-gray-600" value="200ml">200ml</option>
-                                <option className="text-gray-600" value="300ml">300ml</option>
-                                <option className="text-gray-600" value="400ml">400ml</option>
-                                <option className="text-gray-600" value="500ml">500ml</option>
+                                    <option value="" className="text-gray-600">Selecione o tamanho</option>
+                                    <option className="text-gray-600" value="150ml">150ml</option>
+                                    <option className="text-gray-600" value="200ml">200ml</option>
+                                    <option className="text-gray-600" value="300ml">300ml</option>
+                                    <option className="text-gray-600" value="400ml">400ml</option>
+                                    <option className="text-gray-600" value="500ml">500ml</option>
+                                    <option className="text-gray-600" value="700ml">700ml</option>
+                                    <option className="text-gray-600" value="1l">1l</option>
                                 </select>
                             )}
                         </div>
@@ -94,7 +98,7 @@ export function NavBarContent({ dark }:NavBarContentProps) {
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="price" className="font-semibold">Preço</label>
-                            <input type="text" name="price" placeholder="Copo, picole eskimo" className="w-full p-3 border border-gray-300 rounded-md outline-none" />
+                            <input type="text" name="price" onInput={handleMoneyChange} placeholder="2,50" className="w-full p-3 border border-gray-300 rounded-md outline-none" />
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="type" className="font-semibold">Especifique a operação</label>
