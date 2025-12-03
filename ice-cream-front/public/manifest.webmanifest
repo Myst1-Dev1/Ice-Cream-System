@@ -3,9 +3,9 @@
   "short_name": "Sorveteria",
   "description": "Sistema de gerenciamento de gastos e lucros da sorveteria",
   "start_url": "/",
-  "display": "standalone",
-  "background_color": "#FBFBFB",
-  "theme_color": "#FBFBFB",
+  "display": "fullscreen",
+  "background_color": "#74318a",
+  "theme_color": "#74318a",
   "icons": [
     {
       "src": "/icon-192x192.png",
