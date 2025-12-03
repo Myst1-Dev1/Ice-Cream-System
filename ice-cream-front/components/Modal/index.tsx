@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import React from "react";
 import { FaTimes } from "react-icons/fa";
 
@@ -15,6 +17,10 @@ interface ModalProps {
 
 export function Modal({ isOpenModal, setIsOpenModal, formRef, setCategory, children }: ModalProps) {
 
+    useGSAP(() => {
+        gsap.fromTo('.modal', { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" });
+    },[isOpenModal]);
+
     const isDark =
     typeof document !== "undefined" &&
     document.cookie.includes("dark=true");
@@ -22,7 +28,7 @@ export function Modal({ isOpenModal, setIsOpenModal, formRef, setCategory, child
     return (
         <>
         {isOpenModal &&
-            <div className={`fixed z-50 top-0 left-0 right-0 w-full min-h-screen ${isDark ? 'bg-[#202020] text-white' : 'bg-white'}`}>
+            <div className={`modal fixed z-50 top-0 left-0 right-0 w-full min-h-screen ${isDark ? 'bg-[#202020] text-white' : 'bg-white'}`}>
                 <div onClick={() => {
                     setIsOpenModal(false);
                     setCategory('');
