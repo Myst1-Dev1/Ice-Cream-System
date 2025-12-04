@@ -99,7 +99,7 @@ export function SalesBox({ sales }:SalesBoxProps) {
                         </tr>
                         </tbody>
                     </table>
-                    <div className="p-2 border-t border-gray-300 w-full flex gap-5 justify-end items-end">
+                    <div className="p-2 border-t border-gray-300 w-full flex gap-5 justify-between items-center">
                         <div onClick={() => {
                             setIsOpenUpdateModal(true);
                         }} className="text-green-400 cursor-pointer transition-all duration-500 hover:border-transparent hover:text-white hover:bg-yellow-500 w-7 h-7 text-sm rounded-md border border-gray-300 grid place-items-center">
