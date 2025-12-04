@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 export async function createSale(_: FormResult, formData: FormData): Promise<FormResult> {
     const category = formData.get("category")?.toString();
-    const flavor = formData.get("flavor")?.toString();
+    const flavor = formData.get("flavor")?.toString() || "";
     const type = formData.get("type")?.toString();
 
     const priceRaw = formData.get("price");
@@ -20,7 +20,7 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     const cupSize = formData.get("cupSize")?.toString();
     const typeOfPot = formData.get("typeOfPot")?.toString();
 
-    if (!category || !flavor || !priceRaw || !type)
+    if (!category || !priceRaw || !type)
         return { success: false, message: "Campos obrigatórios!" };
 
     let price = Number(priceFloat);
@@ -75,4 +75,108 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
         console.log(error);
         return { success: false, message: "Erro ao cadastrar venda" };
     }
+}
+
+export async function updateSale(_: FormResult, formData: FormData, id: number): Promise<FormResult> {
+    const category = formData.get("category")?.toString();
+    const flavor = formData.get("flavor")?.toString() || "";
+    const type = formData.get("type")?.toString();
+
+    const priceRaw = formData.get("price");
+    const amountRaw = formData.get("amount");
+
+    const priceFloat = priceRaw
+        ? parseFloat(String(priceRaw).replace(",", "."))
+        : null;
+
+    const cupSize = formData.get("cupSize")?.toString();
+    const typeOfPot = formData.get("typeOfPot")?.toString();
+
+    if (!category || !priceRaw || !type)
+        return { success: false, message: "Campos obrigatórios!" };
+
+    let price = Number(priceFloat);
+    const amount = amountRaw ? Number(amountRaw) : undefined;
+
+    if (amount && !isNaN(amount)) {
+        price = price * amount;
+    }
+
+    let finalCategory = category;
+
+    if (category === "Copo" && cupSize) {
+        finalCategory = `Copo de ${cupSize}`;
+    }
+
+    if (category === "Pote" && typeOfPot) {
+        finalCategory = `Pote de ${typeOfPot}`;
+    }
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
+
+    const payload: any = {
+        category: finalCategory,
+        price,
+        type
+    };
+
+    payload.flavor = flavor.trim() === "" ? "" : flavor;
+
+    if (amount !== undefined) {
+        payload.amount = amount;
+    }
+
+    if (amount !== undefined) {
+        payload.amount = amount;
+    }
+
+    try {
+        const res = await fetch(process.env.API_URL + "sales/" + id, {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+        console.log(data);
+
+        revalidatePath('/home');
+        revalidateTag("sales", "max");
+
+        return { success: true, message: "Venda atualizada com sucesso!" };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false, message: "Erro ao atualizar venda!" };
+    }
+}
+
+export async function deleteSale(id: number) {
+    try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get("token")?.value;
+
+        const res = await fetch(process.env.API_URL + "sales/" + id, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+    
+        const data = await res.json();
+        console.log(data);
+    
+        revalidatePath('/home');
+
+        return { success: true, message: "Venda deletada com sucesso!" };
+        
+    } catch (error) {
+        console.log(error)
+        return { success: false, message: "Tivemos um erro ao deletar a venda!" };
+    }    
 }

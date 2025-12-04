@@ -11,8 +11,8 @@ interface ModalProps {
     setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
     children: React.ReactNode
     type?: React.Dispatch<React.SetStateAction<string>>;
-    formRef:any;
-    setCategory:any;
+    formRef?:any;
+    setCategory?:any;
 }
 
 export function Modal({ isOpenModal, setIsOpenModal, formRef, setCategory, children }: ModalProps) {

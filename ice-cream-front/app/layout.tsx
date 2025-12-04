@@ -4,6 +4,7 @@ import "./globals.css";
 import "@/app/register-sw";
 import { Header } from "@/components/Header";
 import { NavBar } from "@/components/NavBar";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,6 +68,7 @@ export default function RootLayout({
         <Header />
         <NavBar />
         {children}
+        <ToastContainer position="top-right" theme="colored" />
       </body>
     </html>
   );

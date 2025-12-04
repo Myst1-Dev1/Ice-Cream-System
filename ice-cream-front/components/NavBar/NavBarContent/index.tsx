@@ -8,6 +8,7 @@ import { useActionState, useRef, useState } from "react";
 import { createSale } from "@/actions/saleActions";
 import { Loading } from "../../loading";
 import { handleMoneyChange } from "@/utils/moneyMask";
+import { toast } from "react-toastify";
 
 interface NavBarContentProps {
     dark: boolean;
@@ -24,6 +25,10 @@ export function NavBarContent({ dark }:NavBarContentProps) {
         
         if (result.success) {
             setIsOpenModal(false);
+            toast.success(result.message);
+        }
+        else {
+            toast.success(result.message);
         }
 
         return result;
@@ -104,7 +109,7 @@ export function NavBarContent({ dark }:NavBarContentProps) {
                             <label htmlFor="type" className="font-semibold">Especifique a operação</label>
                             <select name="type" className="w-full p-3 border border-gray-300 rounded-md outline-none" >
                                 <option className="text-gray-600" value="venda">Venda</option>
-                                <option className="text-gray-600" value="venda">Entrada</option>
+                                <option className="text-gray-600" value="entrada">Entrada</option>
                             </select>
                         </div>
                         <div className="flex flex-col gap-3">
