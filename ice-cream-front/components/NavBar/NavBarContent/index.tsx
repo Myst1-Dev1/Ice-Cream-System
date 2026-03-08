@@ -14,7 +14,7 @@ interface NavBarContentProps {
     dark: boolean;
 }
 
-export function NavBarContent({ dark }:NavBarContentProps) {
+export function NavBarContent({ dark }: NavBarContentProps) {
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [category, setCategory] = useState("");
 
@@ -22,9 +22,11 @@ export function NavBarContent({ dark }:NavBarContentProps) {
 
     async function actionSale(prevState: { success: boolean; message?: string }, formData: FormData) {
         const result = await createSale(prevState, formData);
-        
+
         if (result.success) {
             setIsOpenModal(false);
+            setCategory('');
+            formRef.current?.reset();
             toast.success(result.message);
         }
         else {
@@ -34,10 +36,10 @@ export function NavBarContent({ dark }:NavBarContentProps) {
         return result;
     }
 
-    const [ formState, formAction, pending ] = useActionState(actionSale, { success: false })
+    const [formState, formAction, pending] = useActionState(actionSale, { success: false })
 
     const pathname = usePathname();
-    
+
     return (
         <>
             <nav className={`${dark ? 'bg-[#242424] text-white' : 'bg-white'} w-full h-16 fixed shadow-lg z-50 bottom-0 left-0 right-0 ${pathname === '/' ? 'hidden' : 'flex'} justify-between`}>
@@ -54,14 +56,14 @@ export function NavBarContent({ dark }:NavBarContentProps) {
                 </Link>
             </nav>
 
-            <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} formRef = {formRef} setCategory = {setCategory}>
+            <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} formRef={formRef} setCategory={setCategory}>
                 <div>
                     <h1 className="text-xl text-center font-bold">Cadastre uma nova venda</h1>
                     <form ref={formRef} action={formAction} className="py-12 grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-3">
                             <label htmlFor="category" className="font-semibold">Categoria</label>
                             <select value={category}
-                                    onChange={(e) => setCategory(e.target.value)} name="category" className="w-full p-3 border border-gray-300 rounded-md outline-none" >
+                                onChange={(e) => setCategory(e.target.value)} name="category" className="w-full p-3 border border-gray-300 rounded-md outline-none" >
                                 <option value="" className="text-gray-600">Selecione a categoria</option>
                                 <option className="text-gray-600" value="Picolé Eskimo">Picolé Eskimo</option>
                                 <option className="text-gray-600" value="Picolé ao Leite">Picolé ao Leite</option>
@@ -77,14 +79,16 @@ export function NavBarContent({ dark }:NavBarContentProps) {
                                     className="w-full mt-3 p-3 border border-gray-300 rounded-md outline-none"
                                 >
                                     <option value="" className="text-gray-600">Selecione o tipo</option>
-                                    <option className="text-gray-600" value="Açãi">Açãi</option>
-                                    <option className="text-gray-600" value="Sorvete">Sorvete</option>
+                                    <option className="text-gray-600" value="Açãi 500ml">Açãi 500ml</option>
+                                    <option className="text-gray-600" value="Sorvete 500ml">Sorvete 500ml</option>
+                                    <option className="text-gray-600" value="Sorvete 1,5l">Sorvete 1,5l</option>
+                                    <option className="text-gray-600" value="Bombom">Bombom 1,5l</option>
                                 </select>
                             )}
                             {category === "Copo" && (
                                 <select
-                                name="cupSize"
-                                className="w-full mt-3 p-3 border border-gray-300 rounded-md outline-none"
+                                    name="cupSize"
+                                    className="w-full mt-3 p-3 border border-gray-300 rounded-md outline-none"
                                 >
                                     <option value="" className="text-gray-600">Selecione o tamanho</option>
                                     <option className="text-gray-600" value="150ml">150ml</option>
