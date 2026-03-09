@@ -17,16 +17,21 @@ export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
 
   const salesByHour: Record<string, number> = {};
 
+  const today = new Date().toDateString();
+
   data.forEach((sale) => {
-    if (sale.type === "venda" && sale.createdAt) {
+    if (sale.type !== "venda" || !sale.createdAt) return;
 
-      const hour = new Date(sale.createdAt).getHours();
-      const label = `${hour.toString().padStart(2, "0")}:00`;
+    const saleDate = new Date(sale.createdAt);
 
-      const value = Number(sale.price) || 0;
+    if (saleDate.toDateString() !== today) return;
 
-      salesByHour[label] = (salesByHour[label] || 0) + value;
-    }
+    const hour = saleDate.getHours();
+    const label = `${hour.toString().padStart(2, "0")}:00`;
+
+    const value = Number(sale.price) || 0;
+
+    salesByHour[label] = (salesByHour[label] || 0) + value;
   });
 
   const hours = Object.keys(salesByHour).sort();
