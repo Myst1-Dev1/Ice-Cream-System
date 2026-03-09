@@ -1,4 +1,5 @@
-// next.config.ts
+import withPWA from "next-pwa";
+
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
@@ -7,4 +8,10 @@ const nextConfig = {
   turbopack: {},
 };
 
-export default nextConfig;
+const pwa = withPWA({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+});
+
+export default pwa(nextConfig);

@@ -5,7 +5,7 @@ import { CategoryIcon } from "../CategoryIcon";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import gsap from "gsap";
-import { PiPencilBold, PiTrashBold } from "react-icons/pi";
+import { PiPencilSimpleLineBold, PiTrashSimpleBold } from "react-icons/pi";
 import { deleteSale } from "@/actions/saleActions";
 import { toast } from "react-toastify";
 import { UpdateSaleModal } from "../Modal/UpdateSaleModal";
@@ -15,103 +15,97 @@ interface SalesBoxProps {
     sales: SalesType;
 }
 
-export function SalesBox({ sales }:SalesBoxProps) {
+export function SalesBox({ sales }: SalesBoxProps) {
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false);
 
     gsap.registerPlugin(ScrollTrigger);
-    
+
     useGSAP(() => {
-        ScrollTrigger.create({
-            trigger: '#about',
-            start: 'top 90%',
-            once: true,
-            onEnter: () => {
-                gsap.fromTo(
-                    ".sales-box",
-                    {
-                        opacity: 0,
-                        y: 30,
-                        scale: 0.95,
-                        filter: "blur(6px)",
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        filter: "blur(0px)",
-                        duration: 0.9,
-                        ease: "back.out(1.8)",
-                        stagger: {
-                        each: 0.15,
-                        from: "start",
-                        }
-                    }
-                );
+        gsap.fromTo(
+            ".sales-box",
+            { opacity: 0, y: 20, scale: 0.95 },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: ".sales-box", // Idealmente um ID pai
+                    start: "top 90%",
+                }
             }
-        });
+        );
     }, [sales]);
 
     async function handleDelete() {
+        if (!confirm("Deseja realmente excluir esta venda?")) return;
         const res = await deleteSale(sales.id);
-
-        if (res.success) {
-            toast.success(res.message);
-        } else {
-            toast.error(res.message);
-        }
+        res.success ? toast.success(res.message) : toast.error(res.message);
     }
-    
+
+    const formattedPrice = new Intl.NumberFormat("pt-br", {
+        style: "currency",
+        currency: "BRL",
+    }).format(sales.price);
+
     return (
         <>
-            <div id="sales-box" className="relative sales-box rounded-lg border border-gray-300 mt-5 flex">
-                <div className="shrink-0 grid place-items-center text-xl w-16 border-r border-gray-300">
+            <div className="sales-box mt-8 group relative border border-gray-200 p-4 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-4 mb-4">
+
+                {/* Icone com Badge Estilizado */}
+                <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl border border-gray-300">
                     <CategoryIcon category={sales.category} />
                 </div>
-                <div>
-                    <table className="w-full table-fixed">
-                        <thead>
-                        <tr className="text-left border-b border-gray-300">
-                            <th className="py-2 pl-3 w-1/3 text-sm font-medium text-gray-500">Categoria</th>
-                            {sales.flavor === "" ? "" :<th className="py-2 w-1/3 text-sm font-medium text-gray-500 pl-3">Sabor</th>}
-                            <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">Preço</th>
-                            {sales.amount && (
-                            <th className="py-2 pr-3 w-1/3 text-sm font-medium text-gray-500 text-right">
-                                Quantidade
-                            </th>
-                            )}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr className="text-left">
-                            <td className="py-2 pl-3 w-1/3 text-base font-light">{sales.category}</td>
-                            {sales.flavor === "" ? "" : <td className="py-2 w-1/3 text-base font-light pl-3">{sales.flavor}</td>}
-                            <td className="py-2 pr-3 w-1/3 text-base font-normal text-right">
-                            {Intl.NumberFormat("pt-br", {
-                                style: "currency",
-                                currency: "brl",
-                            }).format(sales.price)}
-                            </td>
-                            {sales.amount && (
-                            <td className="py-2 pr-3 w-1/3 text-base font-normal text-right">
-                                {sales.amount}
-                            </td>
-                            )}
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div className="p-2 border-t border-gray-300 w-full flex gap-5 justify-between items-center">
-                        <div onClick={() => {
-                            setIsOpenUpdateModal(true);
-                        }} className="text-green-400 cursor-pointer transition-all duration-500 hover:border-transparent hover:text-white hover:bg-yellow-500 w-7 h-7 text-sm rounded-md border border-gray-300 grid place-items-center">
-                            <PiPencilBold />
+
+                {/* Informações Principais */}
+                <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Categoria</p>
+                        <h4 className="text-gray-500 font-medium">{sales.category}</h4>
+                    </div>
+
+                    {sales.flavor && (
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Forma de pagamento</p>
+                            <p>{sales.flavor}</p>
                         </div>
-                        <div onClick={handleDelete} className="text-red-600 cursor-pointer transition-all duration-500 hover:border-transparent hover:text-white hover:bg-yellow-500 w-7 h-7 text-sm rounded-md border border-gray-300 grid place-items-center">
-                            <PiTrashBold />
-                        </div>
+                    )}
+
+                    <div className="md:text-right">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Total</p>
+                        <p className="text-lg font-bold text-green-600">
+                            {sales.amount && <span className="text-sm text-gray-400 font-normal mr-2">{sales.amount}x</span>}
+                            {formattedPrice}
+                        </p>
                     </div>
                 </div>
+
+                {/* Ações (Aparecem no Hover ou fixas no Mobile) */}
+                <div className="flex flex-col md:flex-row gap-2 ml-4 border-l pl-4 border-gray-100">
+                    <button
+                        onClick={() => setIsOpenUpdateModal(true)}
+                        className="cursor-pointer p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Editar"
+                    >
+                        <PiPencilSimpleLineBold size={20} />
+                    </button>
+                    <button
+                        onClick={handleDelete}
+                        className="cursor-pointer p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                        title="Excluir"
+                    >
+                        <PiTrashSimpleBold size={20} />
+                    </button>
+                </div>
             </div>
-            <UpdateSaleModal sales={sales} isOpen={isOpenUpdateModal} setIsOpen={setIsOpenUpdateModal} />
+
+            <UpdateSaleModal
+                sales={sales}
+                isOpen={isOpenUpdateModal}
+                setIsOpen={setIsOpenUpdateModal}
+            />
         </>
     )
 }

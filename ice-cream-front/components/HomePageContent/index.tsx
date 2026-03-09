@@ -10,14 +10,14 @@ import gsap from "gsap";
 import { SalesBox } from "../SalesBox";
 
 interface HomePageContentProps {
-    dark:boolean;
+    dark: boolean;
     data: SalesType[];
 }
 
-export function HomePageContent({ dark, data }:HomePageContentProps) {
-   
+export function HomePageContent({ dark, data }: HomePageContentProps) {
+
     useGSAP(() => {
-        gsap.fromTo('.graphFlavor-title', { opacity:0, y:-30 }, { opacity:1, y:0, duration:0.6, ease:'sine.inOut' });
+        gsap.fromTo('.graphFlavor-title', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'sine.inOut' });
     }, []);
 
     return (
@@ -25,8 +25,8 @@ export function HomePageContent({ dark, data }:HomePageContentProps) {
             <div className={`px-3 py-8 transition-all duration-500 ${dark ? 'bg-[#202020] text-white' : 'bg-[#fbfbfb] text-black'}`}>
                 <MoneyAdminBoxes data={data} dark={dark} />
                 <div className="py-12">
-                    <h2 className="text-xl font-bold graphFlavor-title">Gráfico dos 4 sabores mais vendidos</h2>
-                    <FlavorsGraphs data = {data} dark = {dark} />
+                    <h2 className="text-xl font-bold graphFlavor-title">Gráfico de vendas</h2>
+                    <FlavorsGraphs data={data} dark={dark} />
                 </div>
                 <div className="py-12 mb-8">
                     <h2 className="text-xl font-bold">Últimas Vendas</h2>
@@ -38,14 +38,14 @@ export function HomePageContent({ dark, data }:HomePageContentProps) {
                             const today = new Date();
 
                             return (
-                            created.getDate() === today.getDate() &&
-                            created.getMonth() === today.getMonth() &&
-                            created.getFullYear() === today.getFullYear()
+                                created.getDate() === today.getDate() &&
+                                created.getMonth() === today.getMonth() &&
+                                created.getFullYear() === today.getFullYear()
                             );
                         })
                         .map((sales: SalesType) => (
-                        <SalesBox sales={sales} key={sales.id} />
-                    ))}
+                            <SalesBox sales={sales} key={sales.id} />
+                        ))}
                 </div>
             </div>
         </>

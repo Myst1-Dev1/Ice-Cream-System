@@ -66,8 +66,10 @@ export function UpdateSaleModal({ sales, isOpen, setIsOpen }: UpdateSaleModalPro
                             className="w-full mt-3 p-3 border border-gray-300 rounded-md outline-none"
                         >
                             <option className="text-gray-600" value="">Selecione o tipo</option>
-                            <option className="text-gray-600" value="Açãi">Açãi</option>
-                            <option className="text-gray-600" value="Sorvete">Sorvete</option>
+                            <option className="text-gray-600" value="Açãi 500ml">Açãi 500ml</option>
+                            <option className="text-gray-600" value="Sorvete 500ml">Sorvete 500ml</option>
+                            <option className="text-gray-600" value="Sorvete 1,5l">Sorvete 1,5l</option>
+                            <option className="text-gray-600" value="Bombom">Bombom</option>
                         </select>
                     )}
 
@@ -89,14 +91,14 @@ export function UpdateSaleModal({ sales, isOpen, setIsOpen }: UpdateSaleModalPro
                 </div>
 
                 <div className="flex flex-col gap-3">
-                    <label htmlFor="flavor" className="font-semibold">Sabor</label>
-                    <input
-                        defaultValue={sales.flavor}
-                        type="text"
-                        name="flavor"
-                        placeholder="Chocolate"
-                        className="w-full p-3 border border-gray-300 rounded-md outline-none"
-                    />
+                    <label htmlFor="flavor" className="font-semibold">Forma de pagamento</label>
+                    <select defaultValue={sales.flavor} name="flavor" className="w-full p-3 border border-gray-300 rounded-md outline-none">
+                        <option value="" className="text-gray-600">Selecione a forma de pagamento</option>
+                        <option className="text-gray-600" value="Dinheiro">Dinheiro</option>
+                        <option className="text-gray-600" value="Debito">Debito</option>
+                        <option className="text-gray-600" value="Credito">Credito</option>
+                        <option className="text-gray-600" value="Pix">Pix</option>
+                    </select>
                 </div>
 
                 <div className="flex flex-col gap-3">

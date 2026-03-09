@@ -30,7 +30,7 @@ export function NavBarContent({ dark }: NavBarContentProps) {
             toast.success(result.message);
         }
         else {
-            toast.success(result.message);
+            toast.error(result.message);
         }
 
         return result;
@@ -102,8 +102,14 @@ export function NavBarContent({ dark }: NavBarContentProps) {
                             )}
                         </div>
                         <div className="flex flex-col gap-3">
-                            <label htmlFor="flavor" className="font-semibold">Sabor</label>
-                            <input type="text" name="flavor" placeholder="Chocolate" className="w-full p-3 border border-gray-300 rounded-md outline-none" />
+                            <label htmlFor="flavor" className="font-semibold">Forma de pagamento</label>
+                            <select name="flavor" className="w-full p-3 border border-gray-300 rounded-md outline-none">
+                                <option value="" className="text-gray-600">Selecione a forma de pagamento</option>
+                                <option className="text-gray-600" value="Dinheiro">Dinheiro</option>
+                                <option className="text-gray-600" value="Debito">Debito</option>
+                                <option className="text-gray-600" value="Credito">Credito</option>
+                                <option className="text-gray-600" value="Pix">Pix</option>
+                            </select>
                         </div>
                         <div className="flex flex-col gap-3">
                             <label htmlFor="price" className="font-semibold">Preço</label>

@@ -3,7 +3,7 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import React from "react";
+import React, { useRef } from "react";
 import { FaTimes } from "react-icons/fa";
 
 interface ModalProps {
@@ -11,36 +11,38 @@ interface ModalProps {
     setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
     children: React.ReactNode
     type?: React.Dispatch<React.SetStateAction<string>>;
-    formRef?:any;
-    setCategory?:any;
+    formRef?: any;
+    setCategory?: any;
 }
 
 export function Modal({ isOpenModal, setIsOpenModal, formRef, setCategory, children }: ModalProps) {
 
+    const modalRef = useRef<HTMLDivElement>(null);
+
     useGSAP(() => {
-        gsap.fromTo('.modal', { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" });
-    },[isOpenModal]);
+        gsap.fromTo(modalRef.current, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power2.out" });
+    }, [isOpenModal]);
 
     const isDark =
-    typeof document !== "undefined" &&
-    document.cookie.includes("dark=true");
+        typeof document !== "undefined" &&
+        document.cookie.includes("dark=true");
 
     return (
         <>
-        {isOpenModal &&
-            <div className={`modal fixed z-50 top-0 left-0 right-0 w-full min-h-screen ${isDark ? 'bg-[#202020] text-white' : 'bg-white'}`}>
-                <div onClick={() => {
-                    setIsOpenModal(false);
-                    setCategory('');
-                    formRef.current?.reset();
-                }} className="w-7 h-7 text-sm bg-[#262626] text-white grid place-items-center rounded-full absolute top-5 right-3 cursor-pointer transition-all duration-500 hover:bg-yellow-400">
-                    <FaTimes />
+            {isOpenModal &&
+                <div ref={modalRef} className={`fixed z-50 top-0 left-0 right-0 w-full min-h-screen ${isDark ? 'bg-[#202020] text-white' : 'bg-white'}`}>
+                    <div onClick={() => {
+                        setIsOpenModal(false);
+                        setCategory('');
+                        formRef.current?.reset();
+                    }} className="w-7 h-7 text-sm bg-[#262626] text-white grid place-items-center rounded-full absolute top-5 right-3 cursor-pointer transition-all duration-500 hover:bg-yellow-400">
+                        <FaTimes />
+                    </div>
+                    <div className="px-4 py-12">
+                        {children}
+                    </div>
                 </div>
-                <div className="px-4 py-12">
-                    {children}
-                </div>
-            </div>
-        }
+            }
         </>
     )
 }

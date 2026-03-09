@@ -15,54 +15,54 @@ export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
 
   const axisTextColor = dark ? '#ffffff' : '#4b5563';
 
-  const flavorCounts: Record<string, number> = {};
+  const salesByHour: Record<string, number> = {};
 
   data.forEach((sale) => {
-    if (sale.type === "venda" && sale.flavor) {
+    if (sale.type === "venda" && sale.createdAt) {
 
-      const flavors = sale.flavor
-        .split(" e ")
-        .map(f => f.trim())
-        .filter(f => f.length > 0);
+      const hour = new Date(sale.createdAt).getHours();
+      const label = `${hour.toString().padStart(2, "0")}:00`;
 
-      const quantity = sale.amount && sale.amount > 0 ? sale.amount : 1;
+      const value = Number(sale.price) || 0;
 
-      flavors.forEach((f) => {
-        flavorCounts[f] = (flavorCounts[f] || 0) + quantity;
-      });
+      salesByHour[label] = (salesByHour[label] || 0) + value;
     }
   });
 
-  const topFlavors = Object.entries(flavorCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 4);
-
-  const flavors = topFlavors.map(([name]) => name);
-  const values = topFlavors.map(([_, count]) => count);
+  const hours = Object.keys(salesByHour).sort();
+  const values = hours.map((h) => salesByHour[h]);
 
   const options: any = {
     chart: {
-      stacked: false,
       toolbar: { show: false },
     },
 
     colors: ["oklch(79.2% 0.209 151.711)"],
 
     xaxis: {
-      categories: flavors,
+      categories: hours,
+      // title: {
+      //   text: "Horário",
+      //   style: { color: axisTextColor }
+      // },
       labels: {
         style: {
           colors: axisTextColor,
-          fontSize: "14px"
+          fontSize: "10px"
         }
       }
     },
 
     yaxis: {
+      title: {
+        text: "Lucro (R$)",
+        style: { color: axisTextColor, fontSize: "14px", fontWeight: "semibold" }
+      },
       labels: {
         style: {
           colors: axisTextColor
-        }
+        },
+        formatter: (value: number) => `R$ ${value.toFixed(2)}`
       }
     },
 
@@ -74,8 +74,6 @@ export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
     plotOptions: {
       bar: {
         borderRadius: 4,
-        borderRadiusApplication: 'end',
-        horizontal: true,
       }
     },
 
@@ -83,17 +81,15 @@ export function FlavorsGraphs({ data, dark }: FlavorsGraphsProps) {
 
     tooltip: {
       theme: dark ? "dark" : "light",
-      style: {
-        fontSize: "14px",
-        fontFamily: "inherit",
+      y: {
+        formatter: (value: number) => `R$ ${value.toFixed(2)}`
       }
     },
   };
 
   const series = [
     {
-      name: "Vendas por sabor",
-      type: "bar",
+      name: "Lucro por horário",
       data: values,
     }
   ];

@@ -7,20 +7,20 @@ import { cookies } from "next/headers";
 
 export async function createSale(_: FormResult, formData: FormData): Promise<FormResult> {
     const category = formData.get("category")?.toString();
-    const flavor = formData.get("flavor")?.toString() || "";
+    const paymentMethod = formData.get("flavor")?.toString() || "";
     const type = formData.get("type")?.toString();
 
     const priceRaw = formData.get("price");
     const amountRaw = formData.get("amount");
 
     const priceFloat = priceRaw
-    ? parseFloat(String(priceRaw).replace(",", "."))
-    : null;
+        ? parseFloat(String(priceRaw).replace(",", "."))
+        : null;
 
     const cupSize = formData.get("cupSize")?.toString();
     const typeOfPot = formData.get("typeOfPot")?.toString();
 
-    if (!category || !priceRaw || !type)
+    if (!category || !priceRaw || !paymentMethod || !type)
         return { success: false, message: "Campos obrigatórios!" };
 
     let price = Number(priceFloat);
@@ -45,7 +45,7 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
 
     const payload: any = {
         category: finalCategory,
-        flavor,
+        flavor: paymentMethod,
         price,
         type
     };
@@ -63,6 +63,11 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
             },
             body: JSON.stringify(payload),
         });
+
+        if (!res.ok) {
+            console.log(res);
+            return { success: false, message: "Erro ao cadastrar venda" };
+        }
 
         const data = await res.json();
         console.log(data);
@@ -117,12 +122,11 @@ export async function updateSale(_: FormResult, formData: FormData, id: number):
 
     const payload: any = {
         category: finalCategory,
+        flavor,
         price,
         type
     };
 
-    payload.flavor = flavor.trim() === "" ? "" : flavor;
-
     if (amount !== undefined) {
         payload.amount = amount;
     }
@@ -130,6 +134,8 @@ export async function updateSale(_: FormResult, formData: FormData, id: number):
     if (amount !== undefined) {
         payload.amount = amount;
     }
+
+    console.log(payload);
 
     try {
         const res = await fetch(process.env.API_URL + "sales/" + id, {
@@ -167,16 +173,16 @@ export async function deleteSale(id: number) {
                 "Content-Type": "application/json",
             },
         });
-    
+
         const data = await res.json();
         console.log(data);
-    
+
         revalidatePath('/home');
 
         return { success: true, message: "Venda deletada com sucesso!" };
-        
+
     } catch (error) {
         console.log(error)
         return { success: false, message: "Tivemos um erro ao deletar a venda!" };
-    }    
+    }
 }
