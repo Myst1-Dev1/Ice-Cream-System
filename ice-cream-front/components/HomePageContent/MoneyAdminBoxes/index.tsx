@@ -16,6 +16,22 @@ export function MoneyAdminBoxes({ data, dark }: MoneyAdminBoxesProps) {
   const entradasRef = useRef<HTMLHeadingElement>(null);
   const totalRef = useRef<HTMLHeadingElement>(null);
 
+  const today = new Date();
+
+  const todaySales = data.filter((sale: SalesType) => {
+    const saleDate = new Date(sale.createdAt);
+
+    return (
+      saleDate.getDate() === today.getDate() &&
+      saleDate.getMonth() === today.getMonth() &&
+      saleDate.getFullYear() === today.getFullYear()
+    );
+  });
+
+  const todayProfit = todaySales
+    .filter((sale: SalesType) => sale.type === "venda")
+    .reduce((sum: number, sale: SalesType) => sum + sale.price, 0);
+
   const totalVendas = data
     .filter((sale: SalesType) => sale.type === "venda")
     .reduce((sum: any, sale: any) => sum + sale.price, 0);
@@ -27,41 +43,40 @@ export function MoneyAdminBoxes({ data, dark }: MoneyAdminBoxesProps) {
   const receitaTotal = totalVendas - totalEntradas;
 
   const animateValue = (selector: string, endValue: number) => {
-        const obj = { val: 0 };
+    const obj = { val: 0 };
 
-        gsap.to(obj, {
-            val: endValue,
-            duration: 2,
-            ease: "power2.out",
-            onUpdate: () => {
-            const el = document.querySelector(selector);
-            if (!el) return;
+    gsap.to(obj, {
+      val: endValue,
+      duration: 2,
+      ease: "power2.out",
+      onUpdate: () => {
+        const el = document.querySelector(selector);
+        if (!el) return;
 
-            el.innerHTML = Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-            }).format(obj.val);
-            }
-        });
-    };
+        el.innerHTML = Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(obj.val);
+      }
+    });
+  };
 
-
-    useGSAP(() => {
-        animateValue(".num-vendas", totalVendas);
-        animateValue(".num-entradas", totalEntradas);
-        animateValue(".num-total", receitaTotal);
-    }, [data]);
+  useGSAP(() => {
+    animateValue(".num-vendas", todayProfit);
+    animateValue(".num-entradas", totalEntradas);
+    animateValue(".num-total", receitaTotal);
+  }, [data]);
 
   return (
     <div className="grid grid-cols-3 gap-4 place-items-center">
-      
+
       {/* Rendimento */}
       <div className={`${dark ? "bg-[#242424]" : "bg-white"} p-2.5 rounded-md max-w-36 w-full`}>
         <div className="w-6 h-6 bg-green-400 rounded-md grid place-items-center text-white">
           <PiArrowUpRight />
         </div>
         <div>
-          <span className="text-xs font-medium text-gray-500">Rendimento</span>
+          <span className="text-xs font-medium text-gray-500">Lucro De Hoje</span>
           <h3 ref={vendasRef} className="font-bold text-[18px] num-vendas">0</h3>
         </div>
       </div>
