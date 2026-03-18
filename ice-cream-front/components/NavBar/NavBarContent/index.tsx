@@ -40,6 +40,15 @@ export function NavBarContent({ dark }: NavBarContentProps) {
 
     const pathname = usePathname();
 
+    function getLocalDateTime() {
+        const now = new Date();
+        const offset = now.getTimezoneOffset() * 60000;
+
+        return new Date(now.getTime() - offset)
+            .toISOString()
+            .slice(0, 16);
+    }
+
     return (
         <>
             <nav className={`${dark ? 'bg-[#242424] text-white' : 'bg-white'} w-full h-16 fixed shadow-lg z-50 bottom-0 left-0 right-0 ${pathname === '/' ? 'hidden' : 'flex'} justify-between`}>
@@ -82,7 +91,7 @@ export function NavBarContent({ dark }: NavBarContentProps) {
                                     <option className="text-gray-600" value="Açãi 500ml">Açãi 500ml</option>
                                     <option className="text-gray-600" value="Sorvete 500ml">Sorvete 500ml</option>
                                     <option className="text-gray-600" value="Sorvete 1,5l">Sorvete 1,5l</option>
-                                    <option className="text-gray-600" value="Bombom">Bombom 1,5l</option>
+                                    <option className="text-gray-600" value="Bombom">Bombom</option>
                                 </select>
                             )}
                             {category === "Copo" && (
@@ -125,6 +134,10 @@ export function NavBarContent({ dark }: NavBarContentProps) {
                         <div className="flex flex-col gap-3">
                             <label htmlFor="amount" className="font-semibold">Quantidade</label>
                             <input type="number" name="amount" placeholder="Não especificar se for apenas 1" className="w-full p-3 border border-gray-300 rounded-md outline-none" />
+                        </div>
+                        <div className="flex flex-col gap-3">
+                            <label htmlFor="createdAt" className="font-semibold">Data da venda</label>
+                            <input type="datetime-local" name="createdAt" defaultValue={getLocalDateTime()} className="w-full p-3 border border-gray-300 rounded-md outline-none" />
                         </div>
                         {formState.success === false ? <p className="text-center py-3 text-red-700 font-semibold">{formState.message}</p> : ''}
                         <button className="cursor-pointer bg-yellow-500 text-white w-full rounded-lg text-xl font-bold p-3 transition-all duration-500 hover:brightness-90">

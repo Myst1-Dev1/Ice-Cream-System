@@ -13,13 +13,18 @@ export async function getSales() {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             },
-            next: {tags: ['sales'] }
+            next: { tags: ['sales'] }
         });
+
+        if (!res.ok) {
+            console.error("Erro na API:", res.status);
+            return [];
+        }
 
         const data = await res.json();
 
         return data;
     } catch (error) {
-        console.log(error);
+        console.log('erro ao pegar os dados de vendas', error);
     }
 }

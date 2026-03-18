@@ -13,6 +13,12 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     const priceRaw = formData.get("price");
     const amountRaw = formData.get("amount");
 
+    const createdAtRaw = formData.get("createdAt")?.toString();
+
+    const createdAt = createdAtRaw
+        ? new Date(createdAtRaw).toISOString()
+        : new Date().toISOString();
+
     const priceFloat = priceRaw
         ? parseFloat(String(priceRaw).replace(",", "."))
         : null;
@@ -47,7 +53,8 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
         category: finalCategory,
         flavor: paymentMethod,
         price,
-        type
+        type,
+        createdAt
     };
 
     if (amount !== undefined) {
@@ -55,6 +62,9 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     }
 
     try {
+
+        console.log(payload);
+
         const res = await fetch(process.env.API_URL + "sales", {
             method: "POST",
             headers: {

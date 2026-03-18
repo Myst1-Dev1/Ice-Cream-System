@@ -77,7 +77,7 @@ export function MoneyAdminBoxes({ data, dark }: MoneyAdminBoxesProps) {
         </div>
         <div>
           <span className="text-xs font-medium text-gray-500">Lucro De Hoje</span>
-          <h3 ref={vendasRef} className="font-bold text-[18px] num-vendas">0</h3>
+          <h3 ref={vendasRef} className="font-bold text-sm num-vendas">0</h3>
         </div>
       </div>
 
@@ -88,7 +88,7 @@ export function MoneyAdminBoxes({ data, dark }: MoneyAdminBoxesProps) {
         </div>
         <div>
           <span className="text-xs font-medium text-gray-500">Gastos</span>
-          <h3 ref={entradasRef} className="font-bold text-[18px] num-entradas">0</h3>
+          <h3 ref={entradasRef} className="font-bold text-sm num-entradas">0</h3>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export function MoneyAdminBoxes({ data, dark }: MoneyAdminBoxesProps) {
         </div>
         <div>
           <span className="text-xs font-medium text-gray-500">Total</span>
-          <h3 ref={totalRef} className="font-bold text-[18px] num-total">0</h3>
+          <h3 ref={totalRef} className="font-bold text-sm num-total">0</h3>
         </div>
       </div>
 

@@ -24,29 +24,66 @@ export function ReportsContent({ data, dark }: Props) {
     [data, period, selectedDay, selectedType]
   );
 
+  // const total = data
+  //   .filter((sale: SalesType) => {
+  //     if (sale.type !== "venda" || !selectedDay) return false;
+
+  //     return (
+  //       new Date(sale.createdAt).toDateString() ===
+  //       selectedDay.toDateString()
+  //     );
+  //   })
+  //   .reduce((sum: number, sale: SalesType) => sum + sale.price, 0);
+
+  const now = new Date();
+
   const total = data
     .filter((sale: SalesType) => {
-      if (sale.type !== "venda" || !selectedDay) return false;
+      if (sale.type !== "venda" || !sale.createdAt) return false;
 
-      return (
-        new Date(sale.createdAt).toDateString() ===
-        selectedDay.toDateString()
-      );
+      const saleDate = new Date(sale.createdAt);
+
+      if (period === "day") {
+        return saleDate.toDateString() === now.toDateString();
+      }
+
+      if (period === "month") {
+        return (
+          saleDate.getMonth() === now.getMonth() &&
+          saleDate.getFullYear() === now.getFullYear()
+        );
+      }
+
+      if (period === "year") {
+        return saleDate.getFullYear() === now.getFullYear();
+      }
+
+      return false;
     })
     .reduce((sum: number, sale: SalesType) => sum + sale.price, 0);
 
   const quantity = data
     .filter((sale: SalesType) => {
-      if (sale.type !== "venda") return false;
-      if (!selectedDay) return false;
+      if (sale.type !== selectedType || !sale.createdAt) return false;
 
       const saleDate = new Date(sale.createdAt);
 
-      return (
-        saleDate.getDate() === selectedDay.getDate() &&
-        saleDate.getMonth() === selectedDay.getMonth() &&
-        saleDate.getFullYear() === selectedDay.getFullYear()
-      );
+      if (period === "day") {
+        return saleDate.toDateString() === now.toDateString();
+      }
+
+      if (period === "month") {
+        return (
+          saleDate.getMonth() === now.getMonth() &&
+          saleDate.getFullYear() === now.getFullYear()
+        );
+      }
+
+      if (period === "year") {
+        return saleDate.getFullYear() === now.getFullYear();
+      }
+
+      return false;
     })
     .reduce((sum, sale) => sum + (sale.amount ?? 1), 0);
 
@@ -60,7 +97,7 @@ export function ReportsContent({ data, dark }: Props) {
 
   return (
     <>
-      <WeekCalendar selectedDay={selectedDay} onSelectDay={setSelectedDay} />
+      <WeekCalendar selectedDay={selectedDay} onSelectDay={setSelectedDay} data={data} />
 
       <PeriodFilter onChange={setPeriod} />
 
