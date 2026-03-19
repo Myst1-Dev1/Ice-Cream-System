@@ -36,7 +36,7 @@ export function HomePageContent({ dark, data }: HomePageContentProps) {
 
     return (
         <>
-            <div className={`px-3 py-8 transition-all duration-500 ${dark ? 'bg-[#202020] text-white' : 'bg-[#fbfbfb] text-black'}`}>
+            <div className={`px-3 py-8 transition-all duration-500 ${dark ? 'bg-[#202020] text-white min-h-screen' : 'bg-[#fbfbfb] text-black'}`}>
                 <MoneyAdminBoxes data={data} dark={dark} />
                 <div className="py-12">
                     <h2 className="text-xl font-bold graphFlavor-title">Gráfico de vendas</h2>

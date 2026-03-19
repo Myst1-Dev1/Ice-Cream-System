@@ -9,7 +9,7 @@ export default async function Reports() {
     const dark = await isDarkMode();
 
     return (
-        <div className={`px-3 py-8 mb-16 transition-all duration-500 ${dark ? 'bg-[#242424] text-white' : 'bg-[#fbfbfb]'}`}>
+        <div className={`px-3 py-8 mb-16 transition-all duration-500 ${dark ? 'bg-[#242424] text-white min-h-screen' : 'bg-[#fbfbfb] text-black'}`}>
             <ReportsContent data={data} dark={dark} />
         </div>
     );

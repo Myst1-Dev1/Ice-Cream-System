@@ -35,56 +35,36 @@ export function ReportsContent({ data, dark }: Props) {
   //   })
   //   .reduce((sum: number, sale: SalesType) => sum + sale.price, 0);
 
-  const now = new Date();
+  const referenceDate = selectedDay || new Date();
 
-  const total = data
-    .filter((sale: SalesType) => {
-      if (sale.type !== "venda" || !sale.createdAt) return false;
+  const filteredData = data.filter((sale: SalesType) => {
+    if (!sale.createdAt) return false;
+    const saleDate = new Date(sale.createdAt);
 
-      const saleDate = new Date(sale.createdAt);
+    if (period === "day") {
+      return saleDate.toDateString() === referenceDate.toDateString();
+    }
 
-      if (period === "day") {
-        return saleDate.toDateString() === now.toDateString();
-      }
+    if (period === "month") {
+      return (
+        saleDate.getMonth() === referenceDate.getMonth() &&
+        saleDate.getFullYear() === referenceDate.getFullYear()
+      );
+    }
 
-      if (period === "month") {
-        return (
-          saleDate.getMonth() === now.getMonth() &&
-          saleDate.getFullYear() === now.getFullYear()
-        );
-      }
+    if (period === "year") {
+      return saleDate.getFullYear() === referenceDate.getFullYear();
+    }
 
-      if (period === "year") {
-        return saleDate.getFullYear() === now.getFullYear();
-      }
+    return false;
+  });
 
-      return false;
-    })
-    .reduce((sum: number, sale: SalesType) => sum + sale.price, 0);
+  const total = filteredData
+    .filter(sale => sale.type === "venda")
+    .reduce((sum, sale) => sum + sale.price, 0);
 
-  const quantity = data
-    .filter((sale: SalesType) => {
-      if (sale.type !== selectedType || !sale.createdAt) return false;
-
-      const saleDate = new Date(sale.createdAt);
-
-      if (period === "day") {
-        return saleDate.toDateString() === now.toDateString();
-      }
-
-      if (period === "month") {
-        return (
-          saleDate.getMonth() === now.getMonth() &&
-          saleDate.getFullYear() === now.getFullYear()
-        );
-      }
-
-      if (period === "year") {
-        return saleDate.getFullYear() === now.getFullYear();
-      }
-
-      return false;
-    })
+  const quantity = filteredData
+    .filter(sale => sale.type === selectedType)
     .reduce((sum, sale) => sum + (sale.amount ?? 1), 0);
 
   useGSAP(() => {
