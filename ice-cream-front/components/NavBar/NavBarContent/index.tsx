@@ -66,7 +66,7 @@ export function NavBarContent({ dark }: NavBarContentProps) {
             </nav>
 
             <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} formRef={formRef} setCategory={setCategory}>
-                <div className="overflow-y-auto h-[500px] scrollbar">
+                <div className="overflow-y-auto h-[650px] scrollbar">
                     <h1 className="text-xl text-center font-bold">Cadastre uma nova venda</h1>
                     <form ref={formRef} action={formAction} className="py-12 pr-2 grid grid-cols-1 gap-4">
                         <div className="flex flex-col gap-3">
