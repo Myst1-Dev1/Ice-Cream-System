@@ -38,7 +38,7 @@ export function Modal({ isOpenModal, setIsOpenModal, formRef, setCategory, child
                     }} className="w-7 h-7 text-sm bg-[#262626] text-white grid place-items-center rounded-full absolute top-5 right-3 cursor-pointer transition-all duration-500 hover:bg-yellow-400">
                         <FaTimes />
                     </div>
-                    <div className="px-4 py-12">
+                    <div className="px-4 py-12 w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                         {children}
                     </div>
                 </div>
