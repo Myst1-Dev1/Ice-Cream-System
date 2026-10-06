@@ -19,8 +19,17 @@ export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
   @Post()
-  create(@Body() createSaleDto: CreateSaleDTO) {
-    return this.salesService.create(createSaleDto);
+  create(
+    @Body()
+    body: {
+      sale: CreateSaleDTO;
+      inventory: {
+        category: string;
+        flavor: string;
+      };
+    },
+  ) {
+    return this.salesService.create(body.sale, body.inventory);
   }
 
   @Get()

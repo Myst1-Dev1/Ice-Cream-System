@@ -7,7 +7,8 @@ import { cookies } from "next/headers";
 
 export async function createSale(_: FormResult, formData: FormData): Promise<FormResult> {
     const category = formData.get("category")?.toString();
-    const paymentMethod = formData.get("flavor")?.toString() || "";
+    const productFlavor = formData.get("productFlavor")?.toString(); // Removido o || "" para sabermos se veio vazio
+    const paymentMethod = formData.get("paymentMethod")?.toString() || "";
     const type = formData.get("type")?.toString();
 
     const priceRaw = formData.get("price");
@@ -49,22 +50,27 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value;
 
+    // Monta o payload base apenas com a venda
     const payload: any = {
-        category: finalCategory,
-        flavor: paymentMethod,
-        price,
-        type,
-        createdAt
+        sale: {
+            flavor: paymentMethod, // Nota: certifique-se se aqui era flavor ou paymentMethod mesmo
+            price,
+            type,
+            category: finalCategory,
+            createdAt,
+            amount,
+        },
     };
 
-    if (amount !== undefined) {
-        payload.amount = amount;
+    // Só adiciona o inventário ao payload se o usuário preencheu o sabor do produto
+    if (productFlavor && productFlavor.trim() !== "") {
+        payload.inventory = {
+            category: finalCategory,
+            flavor: productFlavor,
+        };
     }
 
     try {
-
-        console.log(payload);
-
         const res = await fetch(process.env.API_URL + "sales", {
             method: "POST",
             headers: {
@@ -75,20 +81,23 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
         });
 
         if (!res.ok) {
-            console.log(res);
-            return { success: false, message: "Erro ao cadastrar venda" };
+            const error = await res.json();
+
+            return {
+                success: false,
+                message: error.message || "Erro ao cadastrar venda",
+            };
         }
 
         const data = await res.json();
         console.log(data);
 
         revalidatePath('/home');
-        revalidateTag("sales", "max");
 
         return { success: true, message: "Venda cadastrada!" };
     } catch (error) {
         console.log(error);
-        return { success: false, message: "Erro ao cadastrar venda" };
+        return { success: false, message: `Erro ao cadastrar venda ${error instanceof Error ? error.message : "Erro desconhecido"}` };
     }
 }
 

@@ -15,21 +15,25 @@ enum SaleType {
 export class CreateSaleDTO {
   @IsNotEmpty()
   @IsString()
-  category: string;
+  category!: string;
 
   @IsNotEmpty()
   @IsString()
-  flavor: string;
+  productFlavor!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  flavor!: string;
 
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
-  price: number;
+  price!: number;
 
   @IsOptional()
   @IsNumber()
-  amount: number;
+  amount!: number;
 
   @IsNotEmpty()
   @IsEnum(SaleType)
-  type: SaleType;
+  type!: SaleType;
 }

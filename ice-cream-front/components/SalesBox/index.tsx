@@ -55,12 +55,12 @@ export function SalesBox({ sales }: SalesBoxProps) {
             <div className="sales-box mt-8 group relative border border-gray-200 p-4 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md flex items-center gap-4 mb-4">
 
                 {/* Icone com Badge Estilizado */}
-                <div className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl border border-gray-300">
+                <div className="shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl border border-gray-300">
                     <CategoryIcon category={sales.category} />
                 </div>
 
                 {/* Informações Principais */}
-                <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
+                <div className="grow grid grid-cols-1 md:grid-cols-3 gap-2 items-center">
                     <div>
                         <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Categoria</p>
                         <h4 className="text-gray-500 font-medium">{sales.category}</h4>
