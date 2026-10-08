@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { AddItemOnInventoryDTO } from './dto/add-item-on-inventory';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
@@ -21,5 +31,18 @@ export class InventoryController {
   @Get(':flavor')
   findItemByFlavor(@Param('flavor') flavor: string) {
     return this.inventoryService.findItemByFlavor(flavor);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDto: Partial<AddItemOnInventoryDTO>,
+  ) {
+    return this.inventoryService.update(id, updateDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.inventoryService.remove(id);
   }
 }

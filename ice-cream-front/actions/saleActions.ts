@@ -53,7 +53,7 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
     // Monta o payload base apenas com a venda
     const payload: any = {
         sale: {
-            flavor: paymentMethod, // Nota: certifique-se se aqui era flavor ou paymentMethod mesmo
+            flavor: paymentMethod,
             price,
             type,
             category: finalCategory,
@@ -62,10 +62,9 @@ export async function createSale(_: FormResult, formData: FormData): Promise<For
         },
     };
 
-    // Só adiciona o inventário ao payload se o usuário preencheu o sabor do produto
     if (productFlavor && productFlavor.trim() !== "") {
         payload.inventory = {
-            category: finalCategory,
+            category: category,
             flavor: productFlavor,
         };
     }

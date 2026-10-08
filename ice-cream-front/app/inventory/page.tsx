@@ -1,6 +1,6 @@
 'use server';
 
-import { InventoryContent } from "@/components/InventoryContent/page";
+import { InventoryContent } from "@/components/InventoryContent";
 import { isDarkMode } from "@/services/darkMode";
 import { getItens } from "@/services/getItens";
 

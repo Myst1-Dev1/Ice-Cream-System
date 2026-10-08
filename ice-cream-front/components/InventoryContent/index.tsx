@@ -3,9 +3,10 @@
 import React, { useActionState } from "react";
 import { Modal } from "../Modal";
 import { Loading } from "../loading";
-import { addItemOnInventory } from "@/actions/InventoryActions";
+import { addItemOnInventory, deleteItemOnInventory } from "@/actions/InventoryActions";
 import { toast } from "react-toastify";
-import { PiPlus } from "react-icons/pi";
+import { PiPencilSimpleLineBold, PiPlus, PiTrashSimpleBold } from "react-icons/pi";
+import { UpdateItemOnInventoryModal } from "./UpdateItemOnInventoryModal";
 
 interface InventoryContentProps {
     items: {
@@ -23,7 +24,9 @@ interface InventoryContentProps {
 
 export function InventoryContent({ items, theme }: InventoryContentProps) {
     const [openModal, setOpenModal] = React.useState(false);
+    const [openUpdateModal, setOpenUpdateModal] = React.useState(false);
     const [category, setCategory] = React.useState("");
+    const [getItemId, setGetItemId] = React.useState(0);
 
     const formRef = React.useRef<HTMLFormElement>(null);
 
@@ -47,6 +50,14 @@ export function InventoryContent({ items, theme }: InventoryContentProps) {
 
     const alertItems = items.filter(item => item.amount <= 3).length;
 
+    async function handleDelete(id: number) {
+        if (!confirm("Deseja realmente excluir esta venda?")) return;
+        const res = await deleteItemOnInventory(id);
+        res.success ? toast.success(res.message) : toast.error(res.message);
+    }
+
+    console.log(getItemId)
+
     return (
         <>
             <div className={`px-4 py-6 mb-16 transition-all duration-500 min-h-screen ${theme.bg}`}>
@@ -68,7 +79,7 @@ export function InventoryContent({ items, theme }: InventoryContentProps) {
                         <div key={item.id}>
                             {item.amount === 0 ? '' :
                             <div
-                                className={`p-5 rounded-2xl border-l-4 transition-all ${theme.card}`}
+                                className={`p-5 relative rounded-2xl border-l-4 transition-all ${theme.card}`}
                             >
                                 <div className="flex justify-between items-start">
                                     <div>
@@ -83,6 +94,22 @@ export function InventoryContent({ items, theme }: InventoryContentProps) {
                                     <p className="text-3xl font-bold">
                                         {item.amount} <span className="text-sm font-normal text-yellow-300">un.</span>
                                     </p>
+                                </div>
+                                <div className="absolute -top-2 right-2 flex flex-col md:flex-row gap-2">
+                                    <button
+                                        onClick={() => { setGetItemId(item.id); setOpenUpdateModal(true)}}
+                                        className="cursor-pointer p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                                        title="Editar"
+                                    >
+                                        <PiPencilSimpleLineBold size={20} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(item.id)}
+                                        className="cursor-pointer p-2 text-red-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                                        title="Excluir"
+                                    >
+                                        <PiTrashSimpleBold size={20} />
+                                    </button>
                                 </div>
                             </div>
                             }
@@ -170,6 +197,8 @@ export function InventoryContent({ items, theme }: InventoryContentProps) {
                     </form>
                 </div>
             </Modal>
+
+            <UpdateItemOnInventoryModal items = {items} id = {getItemId} isOpen={openUpdateModal} setIsOpen={setOpenUpdateModal} />
         </>
     )
 }

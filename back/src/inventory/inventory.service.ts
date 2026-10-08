@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddItemOnInventoryDTO } from './dto/add-item-on-inventory';
@@ -32,6 +28,19 @@ export class InventoryService {
           mode: 'insensitive',
         },
       },
+    });
+  }
+
+  async update(id: number, data: Partial<AddItemOnInventoryDTO>) {
+    return this.prisma.inventory.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async remove(id: number) {
+    return this.prisma.inventory.delete({
+      where: { id },
     });
   }
 }
